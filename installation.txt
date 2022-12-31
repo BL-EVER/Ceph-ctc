@@ -1,0 +1,49 @@
+./cn cluster start temp -d /tmp
+docker commit ceph-nano-temp ceph-nano
+./cn cluster purge temp --yes-i-am-sure
+
+***
+Mount Paths: 
+/etc/ceph
+/var/lib/ceph
+/tmp
+***
+
+
+docker volume create ceph-data-volume
+docker run -dt --name cn -p 8080:8080 -p 5000:5000 -p 8000:8000 -v ceph-data-volume:/etc/ceph -v ceph-data-volume:/var/lib/ceph -v ceph-data-volume:/tmp ceph-nano
+
+docker exec -it cn /bin/bash
+
+##
+ceph config set mgr mgr/dashboard/ssl false
+ceph config set mgr mgr/dashboard/server_addr 0.0.0.0
+ceph config set mgr mgr/dashboard/server_port 8080
+ceph mgr module enable dashboard
+##
+
+until docker exec cn ceph; do docker start cn; sleep 1; done # wait for the services to start
+
+docker exec -it cn /bin/bash
+
+##
+echo 'admin' > /home/passwd.txt
+ceph dashboard set-login-credentials -i /home/passwd.txt admin
+
+RGW_USER=$(radosgw-admin user create --uid=rgw --display-name=rgw --system)
+RGW_ACCESS=$(echo $RGW_USER | awk '{ for (i=1;i<=NF;++i) if ($i ~ /access_key/) { split($(i+1),a,"\""); print a[2] } }')
+RGW_SECRET=$(echo $RGW_USER | awk '{ for (i=1;i<=NF;++i) if ($i ~ /secret_key/) { split($(i+1),a,"\""); print a[2] } }')
+
+echo $RGW_ACCESS > /home/rgw_access.txt
+echo $RGW_SECRET > /home/rgw_secret.txt
+
+ceph dashboard set-rgw-api-access-key -i /home/rgw_access.txt
+ceph dashboard set-rgw-api-secret-key -i /home/rgw_secret.txt
+ceph dashboard set-rgw-api-host 127.0.0.1
+ceph dashboard set-rgw-api-port 8000
+ceph dashboard set-rgw-api-scheme http
+ceph dashboard set-rgw-api-user-id rgw
+
+ceph config dump
+##
+

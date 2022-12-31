@@ -1,0 +1,31 @@
+#!/bin/sh
+./cn cluster start temp -d /tmp
+docker commit ceph-nano-temp ceph-nano
+./cn cluster purge temp --yes-i-am-sure
+docker run -dt --name cn -p 8080:8080 -p 5000:5000 -p 8000:8000 ceph-nano
+sleep 10;
+docker exec cn ceph config set mgr mgr/dashboard/ssl false
+docker exec cn ceph config set mgr mgr/dashboard/server_addr 0.0.0.0
+docker exec cn ceph config set mgr mgr/dashboard/server_port 8080
+docker exec cn ceph mgr module enable dashboard
+until docker exec cn ceph; do docker start cn; sleep 1; done
+sleep 10;
+docker exec cn chmod -R 777 /home
+docker exec cn touch /home/tmp.txt
+docker exec cn chmod -R 777 /home/tmp.txt
+#docker exec cn echo 'admin' > /home/tmp.txt
+docker exec cn tee /home/tmp.txt <<< "admin"
+
+docker exec cn ceph dashboard set-login-credentials -i /home/tmp.txt admin
+
+docker exec -it cn /bin/bash
+./cn cluster start -d /tmp -b /dev/sdb temp
+sudo ./cn cluster start -d /tmp -b /mnt/c/Users/Bill/Desktop/CEPH/data temp
+sudo ./cn cluster start -d /tmp/ceph temp
+
+/etc/ceph
+/var/lib/ceph
+/tmp
+
+docker volume create ceph-data-volume
+docker run -dt --name cn -p 8080:8080 -p 5000:5000 -p 8000:8000 -v ceph-data-volume:/etc/ceph -v ceph-data-volume:/var/lib/ceph -v ceph-data-volume:/tmp ceph-nano
