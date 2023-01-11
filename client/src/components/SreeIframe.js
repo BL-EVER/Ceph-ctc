@@ -29,9 +29,9 @@ const SreeIframe = () => {
                             'Content-Type': 'application/json',
                         }
                 });
-            console.log(respUser);
+            //console.log(respUser);
             const resp = await axios.post(`/capi/assignBuckets`, {uid: idTokenPayload.email, org: respUser.data.organization});
-            console.log(resp);
+            //console.log(resp);
         }
         catch (e) {
             console.error(e);
@@ -74,12 +74,15 @@ const SreeIframe = () => {
                 console.error(error);
             }
         }
-        console.log(payload);
-        await configureBuckets();
-        loadFrame(payload);
+        //console.log(payload);
+        //await configureBuckets();
+        //loadFrame(payload);
+        return payload
     }
     useEffect(() => {
-        fetchdata();
+        Promise.all([fetchdata(), configureBuckets()]).then((data) => {
+            loadFrame(data[0]);
+        })
     }, [])
 
     return (
