@@ -116,7 +116,7 @@ def listbucketsurl():
   date = from_request(request, 'date')
 
   headers = {'Authorization':s3auth, 'x-amz-date': date}
-
+  print(url)
   r = requests.get(url, headers=headers)
 
   statuscode = r.status_code

@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    extra_hosts:
+      docker-root-host: "${DOCKER_GATEWAY_HOST:-192.168.1.4}"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./scripts/crypto/cert.pem:/etc/nginx/cert.pem
+      - ./scripts/crypto/key.pem:/etc/nginx/key.pem

@@ -8,11 +8,11 @@ function App() {
     const {oidcUser, oidcUserLoadingState} = useOidcUser();
   return (
     <div>
-        <AppBar position="static" color="primary" sx={{ bottom: 'auto', top: 0 }} style={{marginBottom: "20px"}} >
+        <AppBar position="static" sx={{ bottom: 'auto', top: 0 }} style={{marginBottom: "20px", backgroundColor: "lightgray"}} >
             <Toolbar>
-                <img src="https://ctc-project.eu/wp-content/uploads/2021/11/cropped-CtC-Logo-Vert-Gradient.png" alt="CtC Logo" height="50"/>
-                {!isAuthenticated && <Button color="inherit" style={{marginLeft: "auto"}} onClick={() => login('/')}>Login</Button>}
-                {isAuthenticated && <Button color="inherit" style={{marginLeft: "auto"}} onClick={() => logout()}>logout</Button>}
+                <img src="https://ctc-project.eu/wp-content/uploads/2021/11/cropped-CtC-Logo-Vert-Gradient.png" alt="CtC Logo" height="60"/>
+                {!isAuthenticated && <Button variant="outlined" color='inherit' style={{marginLeft: "auto", color: "black"}} onClick={() => login('/')}>Login</Button>}
+                {isAuthenticated && <Button variant="outlined" color="inherit" style={{marginLeft: "auto", color: "black"}} onClick={() => logout()}>logout</Button>}
             </Toolbar>
         </AppBar>
         <OidcSecure>
@@ -20,10 +20,10 @@ function App() {
         </OidcSecure>
 
         <div style={{marginBottom: "75px"}}/>
-        <AppBar position="static" color="primary" sx={{ top: 'auto', bottom: 0 }} style={{marginTop: "20px"}} >
+        <AppBar position="static" sx={{ top: 'auto', bottom: 0 }} style={{marginTop: "20px", backgroundColor: "lightgray"}} >
             <Toolbar>
                 <Typography variant="body1" color="inherit" component="div" style={{marginLeft: "auto"}}>
-                    <a href="https://ctc-project.eu" style={{textDecoration: 'underline', color: 'white'}}>© CutTheCord Project</a>
+                    <a href="https://ctc-project.eu" style={{textDecoration: 'underline', color: 'black'}}>© CutTheCord Project</a>
                 </Typography>
             </Toolbar>
         </AppBar>

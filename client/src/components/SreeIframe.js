@@ -14,6 +14,30 @@ const SreeIframe = () => {
         iframe.contentWindow.postMessage(payload, "*");
         setIframeUrl('http://127.0.0.1:5555')
     }
+
+    const configureBuckets = async () => {
+        try {
+            const respUser = await axios.get(`/ctcapi/api/v1/users/email/${idTokenPayload.email}`,
+                {
+
+                        auth: {
+                            username: "admin",
+                            password: "root"
+                        },
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            'Content-Type': 'application/json',
+                        }
+                });
+            console.log(respUser);
+            const resp = await axios.post(`/capi/assignBuckets`, {uid: idTokenPayload.email, org: respUser.data.organization});
+            console.log(resp);
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
     const fetchdata = async () => {
         let payload = {
             region: "us-east-1",
@@ -21,22 +45,22 @@ const SreeIframe = () => {
         }
         //Fetch Endpoint
         try {
-            const responseUri = await axios.get('http://localhost:81/endpoint');
-            payload.endpoint = responseUri.data;
+            const responseUri = await axios.get('/capi/endpoint');
+            payload.endpoint = "http://" + responseUri.data;
         } catch (error) {
             console.error(error);
         }
 
         //Fetch Access Keys
         try {
-            const responseUser = await axios.get(`http://localhost:81/user/${idTokenPayload.email}`);
+            const responseUser = await axios.get(`/capi/user/${idTokenPayload.email}`);
             payload.accessKeyId = responseUser.data.keys[0].access_key;
             payload.secretKeyId = responseUser.data.keys[0].secret_key;
         } catch (error) {
 
             //Create User if not exists
             try {
-                const createUserResp = await axios.post('http://localhost:81/user', {
+                const createUserResp = await axios.post('/capi/user', {
                     "uid": idTokenPayload.email,
                     "display_name": idTokenPayload.email,
                     "email": idTokenPayload.email,
@@ -51,6 +75,7 @@ const SreeIframe = () => {
             }
         }
         console.log(payload);
+        await configureBuckets();
         loadFrame(payload);
     }
     useEffect(() => {

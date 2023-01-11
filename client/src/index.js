@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {OidcProvider} from "@axa-fr/react-oidc";
 
 const configuration = {
-    client_id: 'react',
+    client_id: 'frontend',
     redirect_uri: window.location.origin + '/authentication/callback',
     silent_redirect_uri: window.location.origin + '/authentication/silent-callback',
     scope: 'openid',
