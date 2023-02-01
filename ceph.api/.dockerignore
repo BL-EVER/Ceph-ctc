@@ -1,0 +1,5 @@
+.env
+.gitignore
+Dockerfile.txt
+start.ps1
+test.py

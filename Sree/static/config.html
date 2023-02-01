@@ -119,7 +119,8 @@
     window.addEventListener("message", (event) => {
         console.log(event.origin);
         console.log(event.data);
-        if (event.origin !== "http://localhost:3000")
+        //if (event.origin !== "http://localhost:3000")
+        if (!event.origin.includes("localhost") && !event.origin.includes("193.92.45.174"))
             return;
         const {endpoint, region, accessKeyId, secretKeyId, acl} = event.data;
         window.localStorage.setItem('endpoint', endpoint);

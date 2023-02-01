@@ -9,7 +9,7 @@ load_dotenv()
 access_key=os.environ['CEPH_ACCESS_KEY']
 secret_key=os.environ['CEPH_SECRET_KEY']
 server=os.environ['CEPH_SERVER']
-
+sree_server=os.environ['SREE_SERVER']
 
 #https://rgwadmin.readthedocs.io/en/latest/rgwadmin/user-guide.html
 
@@ -34,7 +34,11 @@ s3 = boto3.client('s3',
 #For sree to locate ceph api
 @app.route(PREFIX + "/endpoint", methods=["GET"])##
 def getEndpoint():
-    return jsonify(os.environ['CEPH_SERVER'])
+    return jsonify(os.environ['CEPH_SERVER_EXTERNAL'])
+
+@app.route(PREFIX + "/sree", methods=["GET"])##
+def getSree():
+    return jsonify(os.environ['SREE_SERVER'])
 
 @app.route(PREFIX + "/user", methods=["POST"])##
 def setUser():

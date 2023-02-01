@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import axios from "axios";
-import {useOidcIdToken, useOidcUser} from "@axa-fr/react-oidc";
+import {useOidcIdToken} from "@axa-fr/react-oidc";
 
-const SreeIframe = () => {
-    const [iframeSrc, setIframeUrl] = useState('http://127.0.0.1:5555/config.html');
+const SreeIframe = (props) => {
+    const [iframeSrc, setIframeUrl] = useState(props.iframeSrc);
+
     const { height, width } = useWindowDimensions();
     const{ idToken, idTokenPayload } = useOidcIdToken();
 
-    const loadFrame = (payload) => {
+    const loadFrame = async (payload) => {
 
         const iframe = document.querySelector("iframe");
         iframe.contentWindow.postMessage(payload, "*");
-        setIframeUrl('http://127.0.0.1:5555')
+        setIframeUrl(props.sree)
     }
 
     const configureBuckets = async () => {

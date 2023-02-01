@@ -10,7 +10,8 @@ function App() {
     <div>
         <AppBar position="static" sx={{ bottom: 'auto', top: 0 }} style={{marginBottom: "20px", backgroundColor: "lightgray"}} >
             <Toolbar>
-                <img src="https://ctc-project.eu/wp-content/uploads/2021/11/cropped-CtC-Logo-Vert-Gradient.png" alt="CtC Logo" height="60"/>
+                {/*https://ctc-project.eu/wp-content/uploads/2021/11/cropped-CtC-Logo-Vert-Gradient.png*/}
+                <img src="CTC.png" alt="CtC Logo" height="60"/>
                 {!isAuthenticated && <Button variant="outlined" color='inherit' style={{marginLeft: "auto", color: "black"}} onClick={() => login('/')}>Login</Button>}
                 {isAuthenticated && <Button variant="outlined" color="inherit" style={{marginLeft: "auto", color: "black"}} onClick={() => logout()}>logout</Button>}
             </Toolbar>

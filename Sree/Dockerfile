@@ -1,11 +1,10 @@
-FROM centos:7.2.1511
+FROM python:3.8-slim-buster
 
-WORKDIR /sree
-COPY ["static", "/sree/static"]
-COPY ["xmlparser.py", "app.py", "/sree/"]
+WORKDIR /python-docker
 
-RUN yum install -y epel-release
-RUN yum install -y python2-pip
-RUN pip install flask requests
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
 
-ENTRYPOINT ["python", "/sree/app.py"]
+COPY . .
+
+CMD [ "python3", "app.py" ]
